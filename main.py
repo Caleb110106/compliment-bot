@@ -6,8 +6,9 @@ from keep_alive import keep_alive
 
 keep_alive()
 
+# Securely get the token and user ID from environment variables
 TOKEN = os.getenv("TOKEN")
-SECRET_USER_ID = int(os.getenv("895766579126603886"))
+SECRET_USER_ID = int(os.getenv("SECRET_USER_ID"))
 
 compliments = [
     "You're amazing!",
@@ -24,6 +25,7 @@ secret_message = (
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 client = discord.Client(intents=intents)
 
 @client.event
@@ -53,3 +55,4 @@ while True:
     except Exception as e:
         print(f"⚠️ Bot crashed! Restarting in 5 seconds...\nError: {e}")
         time.sleep(5)
+
