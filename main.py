@@ -16,6 +16,7 @@ compliments = [
     "You're beautiful.",
     "You're talented.",
     "You make a difference.",
+    "There is someone out there that loves you.",
 ]
 
 secret_message = (
@@ -36,12 +37,21 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+         msg = message.content.lower()
 
-    if message.content.lower() == "!compliment":
-        compliment = random.choice(compliments)
-        await message.channel.send(f"{message.author.mention}, {compliment}")
+    if msg.startswith("!compliment"):
+        parts = message.content.split()
 
-    if message.author.id == SECRET_USER_ID and message.content.lower() == "!secret":
+        # Check if someone was mentioned
+        if len(parts) > 1 and message.mentions:
+            mentioned_user = message.mentions[0]
+            compliment = random.choice(compliments)
+            await message.channel.send(f"{mentioned_user.mention}, {compliment} (from {message.author.mention})")
+        else:
+            compliment = random.choice(compliments)
+            await message.channel.send(f"{message.author.mention}, {compliment}")
+
+    elif message.author.id == SECRET_USER_ID and msg == "!secret":
         try:
             await message.author.send(secret_message)
         except discord.Forbidden:
@@ -49,6 +59,7 @@ async def on_message(message):
                 f"{message.author.mention}, I tried to DM you but couldn’t!"
             )
 
+# Auto-restart loop
 while True:
     try:
         client.run(TOKEN)
