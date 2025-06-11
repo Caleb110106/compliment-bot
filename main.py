@@ -1,32 +1,34 @@
-import os
 import discord
 import random
 import time
+import os
 from keep_alive import keep_alive
 
+# Start Flask web server
 keep_alive()
 
-# Securely get the token and user ID from environment variables
+# Load token and secret user ID from environment variables
 TOKEN = os.getenv("TOKEN")
 SECRET_USER_ID = int(os.getenv("SECRET_USER_ID"))
 
+# Compliment list
 compliments = [
     "You're amazing!",
     "God loves you!",
     "You're beautiful.",
     "You're talented.",
     "You make a difference.",
-    "There is someone out there that loves you.",
 ]
 
+# Secret message
 secret_message = (
     "I love you, señora! 💖 Keep being the beautiful and amazing woman that you are. "
     "I'm very happy and lucky to have such an incredible woman and friend in my life."
 )
 
+# Set up Discord client
 intents = discord.Intents.default()
 intents.message_content = True
-
 client = discord.Client(intents=intents)
 
 @client.event
@@ -37,7 +39,8 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-         msg = message.content.lower()
+
+    msg = message.content.lower()
 
     if msg.startswith("!compliment"):
         parts = message.content.split()
@@ -66,4 +69,3 @@ while True:
     except Exception as e:
         print(f"⚠️ Bot crashed! Restarting in 5 seconds...\nError: {e}")
         time.sleep(5)
-
